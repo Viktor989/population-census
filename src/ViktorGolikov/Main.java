@@ -11,7 +11,7 @@ public class Main {
         List<String> names = Arrays.asList("Петр", "Виктор", "Ирина", "Егор", "Игорь", "Юлия");
         List<String> families = Arrays.asList("Иванов", "Петров", "Сидоров", "Петросян", "Пугачева", "Кабзон", "Львов");
         Collection<Person> persons = new ArrayList<>();
-        for (int i = 0; i < 10_000_000; i++) {
+        for (int i = 0; i < 200; i++) {
             persons.add(new Person(
                     names.get(new Random().nextInt(names.size())),
                     families.get(new Random().nextInt(families.size())),
@@ -36,14 +36,20 @@ public class Main {
         System.out.println(conscripts);
 
         System.out.println("Список потенциально работоспособного населения");
-        List<Person> workable = persons.stream()
-                .filter(x -> x.getAge() >= 18)
-                .filter(y -> y.getAge() <= 60)
+        List<Person> workableMen = persons.stream()
+                .filter(x -> x.getAge() >= 18 )
+                .filter(y -> y.getAge() <= 60 && y.getSex().equals(Sex.MAN))
                 .filter(z -> z.getEducation().equals(Education.HIGHER))
-                //.map(Person::getFamily)
                 .sorted(Comparator.comparing(Person::getFamily))
                 .collect(Collectors.toList());
-        System.out.println(workable);
+        System.out.println(workableMen);
+        List<Person> workableWoman = persons.stream()
+                .filter(x -> x.getAge() >= 18 )
+                .filter(i -> i.getAge() <= 55 && i.getSex().equals(Sex.WOMAN))
+                .filter(z -> z.getEducation().equals(Education.HIGHER))
+                .sorted(Comparator.comparing(Person::getFamily))
+                .collect(Collectors.toList());
+        System.out.println(workableWoman);
 
     }
 }
